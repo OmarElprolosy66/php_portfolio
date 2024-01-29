@@ -309,13 +309,17 @@ $portfolios = get_portfolios_byname();
                         </thead>
                         <tbody>
                             <?php foreach ($portfolios as $por): ?>
-                            <tr>
-                                <td><?= $por["description"];?></td>
-                                <td><?= $por["name"]; ?></td>
-                                <td><img height="200px" width="200px" src="upload/<?= $por["image"]; ?>" alt="..."></td>
-                                <td><a href="">update</a></td>
-                                <td><a href="deleteportfolio.php?por_id=<?= $por["id"];?>">delete</a></td>
-                            </tr>
+                                <tr>
+                                    <td>
+                                        <?= $por["description"]; ?>
+                                    </td>
+                                    <td>
+                                        <?= $por["name"]; ?>
+                                    </td>
+                                    <td><img height="200px" width="200px" src="upload/<?= $por["image"]; ?>" alt="..."></td>
+                                    <td><a href="updateportfolio.php?por_id=<?= $por["id"]; ?>">update</a></td>
+                                    <td><a href="deleteportfolio.php?por_id=<?= $por["id"]; ?>">delete</a></td>
+                                </tr>
                             <?php endforeach; ?>
                         </tbody>
                         <tfoot>

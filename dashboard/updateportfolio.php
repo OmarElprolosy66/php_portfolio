@@ -3,16 +3,29 @@ session_start();
 
 include_once "lib/libportfolio.php";
 
+
 if (isset($_POST["desc"])) {
     $desc = $_POST["desc"];
-    $file_name = $_FILES["img"]["name"];
-    $temp_path = $_FILES["img"]["tmp_name"];
+    $por_id = $_POST["por_id"];
     $user_id = $_SESSION["user"]["id"];
 
-    move_uploaded_file($temp_path, "upload/" . $file_name);
-    $result = insert_portfdata($user_id, $file_name, $desc);
+    if (isset($_FILES["img"]["name"])) {
+        $file_name = $_FILES["img"]["name"];
+        $temp_path = $_FILES["img"]["tmp_name"];
 
-    if ($result === true) $status = true; else $status = false;
+        move_uploaded_file($temp_path, "upload/" . $file_name);
+    } else {
+        $file_name = "";
+    }
+
+    $result = update_portfolio($por_id, $file_name, $desc);
+
+    if ($result === true)
+        header("Location:portfolios_management.php");
+    else
+        $status = false;
+} else {
+    $portfolio = get_portfolio_byid($_GET["por_id"]);
 }
 ?>
 
@@ -25,7 +38,8 @@ if (isset($_POST["desc"])) {
     <title>AdminLTE 3 | Dashboard</title>
 
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="backassets/plugins/fontawesome-free/css/all.min.css">
     <!-- Ionicons -->
@@ -79,7 +93,8 @@ if (isset($_POST["desc"])) {
                     <div class="navbar-search-block">
                         <form class="form-inline">
                             <div class="input-group input-group-sm">
-                                <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+                                <input class="form-control form-control-navbar" type="search" placeholder="Search"
+                                    aria-label="Search">
                                 <div class="input-group-append">
                                     <button class="btn btn-navbar" type="submit">
                                         <i class="fas fa-search"></i>
@@ -103,7 +118,8 @@ if (isset($_POST["desc"])) {
                         <a href="#" class="dropdown-item">
                             <!-- Message Start -->
                             <div class="media">
-                                <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+                                <img src="dist/img/user1-128x128.jpg" alt="User Avatar"
+                                    class="img-size-50 mr-3 img-circle">
                                 <div class="media-body">
                                     <h3 class="dropdown-item-title">
                                         Brad Diesel
@@ -119,7 +135,8 @@ if (isset($_POST["desc"])) {
                         <a href="#" class="dropdown-item">
                             <!-- Message Start -->
                             <div class="media">
-                                <img src="dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+                                <img src="dist/img/user8-128x128.jpg" alt="User Avatar"
+                                    class="img-size-50 img-circle mr-3">
                                 <div class="media-body">
                                     <h3 class="dropdown-item-title">
                                         John Pierce
@@ -135,11 +152,13 @@ if (isset($_POST["desc"])) {
                         <a href="#" class="dropdown-item">
                             <!-- Message Start -->
                             <div class="media">
-                                <img src="dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+                                <img src="dist/img/user3-128x128.jpg" alt="User Avatar"
+                                    class="img-size-50 img-circle mr-3">
                                 <div class="media-body">
                                     <h3 class="dropdown-item-title">
                                         Nora Silvester
-                                        <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
+                                        <span class="float-right text-sm text-warning"><i
+                                                class="fas fa-star"></i></span>
                                     </h3>
                                     <p class="text-sm">The subject goes here</p>
                                     <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
@@ -184,7 +203,8 @@ if (isset($_POST["desc"])) {
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#" role="button">
+                    <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#"
+                        role="button">
                         <i class="fas fa-th-large"></i>
                     </a>
                 </li>
@@ -196,7 +216,8 @@ if (isset($_POST["desc"])) {
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="index3.html" class="brand-link">
-                <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+                <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+                    style="opacity: .8">
                 <span class="brand-text font-weight-light">AdminLTE 3</span>
             </a>
 
@@ -215,7 +236,8 @@ if (isset($_POST["desc"])) {
                 <!-- SidebarSearch Form -->
                 <div class="form-inline">
                     <div class="input-group" data-widget="sidebar-search">
-                        <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+                        <input class="form-control form-control-sidebar" type="search" placeholder="Search"
+                            aria-label="Search">
                         <div class="input-group-append">
                             <button class="btn btn-sidebar">
                                 <i class="fas fa-search fa-fw"></i>
@@ -226,7 +248,8 @@ if (isset($_POST["desc"])) {
 
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                        data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                         <li class="nav-item menu-open">
@@ -285,8 +308,9 @@ if (isset($_POST["desc"])) {
             </div>
             <!-- /.content-header -->
             <!-- Main content -->
-            <?php if (isset($status)) : ?>
-                <div class="alert <?php if ($status == true) : ?> alert-success <?php else : ?> alert-danger <?php endif ?> alert-dismissible">
+            <?php if (isset($status)): ?>
+                <div
+                    class="alert <?php if ($status == true): ?> alert-success <?php else: ?> alert-danger <?php endif ?> alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                     <h5><i class="icon fas fa-ban"></i> Alert!</h5>
                     <ul>
@@ -298,15 +322,19 @@ if (isset($_POST["desc"])) {
             <?php endif ?>
             <div class="card card-primary">
                 <div class="card-header">
-                    <h3 class="card-title">Insert a new portfolio</h3>
+                    <h3 class="card-title">Update</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
-                <form action="portfolio.php" method="post" enctype="multipart/form-data">
+                <form action="updateportfolio.php" method="post" enctype="multipart/form-data">
                     <div class="card-body">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Description</label>
-                            <textarea class="form-control textarea" id="exampleInputEmail1" name="desc"></textarea>
+                            <textarea class="form-control textarea" id="exampleInputEmail1"
+                                name="desc"><?= $portfolio["description"]; ?></textarea>
+                        </div>
+                        <div>
+                            <img src="upload/<?= $portfolio["image"]; ?>" alt="..." width="200px">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputFile">File input</label>
@@ -318,13 +346,16 @@ if (isset($_POST["desc"])) {
                                 <div class="input-group-append">
                                     <span class="input-group-text">Upload</span>
                                 </div>
+                                <?php if ($portfolio): ?>
+                                    <input type="hidden" name="por_id" value="<?= $portfolio["id"] ?>">
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
                     <!-- /.card-body -->
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
                     </div>
                 </form>
             </div>
@@ -373,7 +404,7 @@ if (isset($_POST["desc"])) {
     <!-- Summernote -->
     <script src="backassets/plugins/summernote/summernote-bs4.min.js"></script>
     <script>
-        $(function() {
+        $(function () {
             // Summernote
             $('textarea').summernote()
 
