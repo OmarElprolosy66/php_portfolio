@@ -7,7 +7,7 @@ function insert_portfdata($user_id, $img, $desc)
     $query = "INSERT INTO `portfolio` (user_id, image, description) VALUES ('$user_id', '$img', '$desc')";
     mysqli_query($db, $query);
 
-    return (bool)mysqli_affected_rows($db);
+    return (bool) mysqli_affected_rows($db);
 }
 
 function get_portfolios()
@@ -44,7 +44,6 @@ function get_portfolios()
     return $storage;
 }
 
-
 function get_portfolios_byname()
 {
     $db = mysqli_connect("127.0.0.1", "root", "", "proone");
@@ -77,4 +76,14 @@ function get_portfolios_byname()
     mysqli_close($db);
 
     return $storage;
+}
+
+function delete_portfolio($por_id)
+{
+    $db = mysqli_connect("127.0.0.1", "root", "", "proone");
+
+    $query = "DELETE FROM `portfolio` WHERE `id` = '$por_id'";
+    mysqli_query($db, $query);
+
+    return (bool) mysqli_affected_rows($db);
 }
